@@ -10,9 +10,9 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.github.manuel-valles</groupId>
+    <groupId>com.github.devall-labs</groupId>
     <artifactId>microservices-bom</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.0</version>
     <name>microservices-bom</name>
     <description>Microservices BOM</description>
 
