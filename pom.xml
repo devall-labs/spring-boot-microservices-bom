@@ -10,11 +10,21 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.github.devall-labs</groupId>
+    <groupId>com.manuel-valles</groupId>
     <artifactId>microservices-bom</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.2</version>
     <name>microservices-bom</name>
     <description>Microservices BOM</description>
+
+    <url>https://github.com/devall-labs/spring-boot-microservices-bom</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <organization>
         <name>DeVall</name>
@@ -26,6 +36,10 @@
             <organization>DeVall</organization>
         </developer>
     </developers>
+
+    <scm>
+        <url>https://github.com/devall-labs/spring-boot-microservices-bom</url>
+    </scm>
 
     <packaging>pom</packaging>
 
@@ -177,6 +191,52 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.3</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <keyname>AE3E876E0CD82CAF</keyname>
+                            <gpgArguments>
+                                <argument>--pinentry-mode</argument>
+                                <argument>loopback</argument>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
