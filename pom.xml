@@ -12,7 +12,7 @@
 
     <groupId>com.manuel-valles</groupId>
     <artifactId>microservices-bom</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
     <name>microservices-bom</name>
     <description>Microservices BOM</description>
 
@@ -45,12 +45,37 @@
 
     <properties>
         <java.version>17</java.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
         <org.mapstruct.version>1.6.0</org.mapstruct.version>
         <org.lombok.version>1.18.34</org.lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -74,7 +99,8 @@
         <dependency>
             <groupId>org.springframework.statemachine</groupId>
             <artifactId>spring-statemachine-core</artifactId>
-            <version>4.0.0</version>
+            <!-- Downgraded due to block system used in microservices  -->
+            <version>2.5.1</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -101,6 +127,19 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.zipkin.reporter2</groupId>
+            <artifactId>zipkin-reporter-brave</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>8.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -206,10 +245,6 @@
                 </executions>
                 <configuration>
                     <keyname>AE3E876E0CD82CAF</keyname>
-                    <gpgArguments>
-                        <argument>--pinentry-mode</argument>
-                        <argument>loopback</argument>
-                    </gpgArguments>
                 </configuration>
             </plugin>
             <plugin>
