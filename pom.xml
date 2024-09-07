@@ -12,7 +12,7 @@
 
     <groupId>com.manuel-valles</groupId>
     <artifactId>microservices-bom</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.5</version>
     <name>microservices-bom</name>
     <description>Microservices BOM</description>
 
@@ -44,11 +44,17 @@
     <packaging>pom</packaging>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <org.mapstruct.version>1.6.0</org.mapstruct.version>
         <org.lombok.version>1.18.34</org.lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <docker.image.prefix>manukem</docker.image.prefix>
+        <docker.image.name>${project.artifactId}</docker.image.name>
     </properties>
 
     <dependencyManagement>
@@ -167,6 +173,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                        <includeLayerTools>true</includeLayerTools>
+                    </layers>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -255,6 +265,30 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <tokenAuth>true</tokenAuth>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.45.0</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <name>${docker.image.prefix}/${docker.image.name}</name>
+                            <alias>${project.artifactId}</alias>
+                            <build>
+                                <assembly>
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
+                                <dockerFile>Dockerfile</dockerFile>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${project.version}</tag>
+                                </tags>
+                            </build>
+                        </image>
+                    </images>
                 </configuration>
             </plugin>
         </plugins>
